@@ -13,6 +13,7 @@ pip install ofry-fasatpi-auth-cognito
 
 Configure `.env` file:
 ```
+DATABASE_URL=
 COGNITO_REGION=
 COGNITO_POOL_ID=
 ```

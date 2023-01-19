@@ -5,19 +5,17 @@ from sqlalchemy.dialects.postgresql import UUID
 
 from typing import AsyncGenerator
 from datetime import datetime
-from database.connection import Base, engine
 
 
 ########################
 # Users                #
 ########################
 
-class User(Base):
+class UT():
 
     __tablename__ = 'users'
 
     id = Column(UUID(as_uuid=True), primary_key=True , default = uuid.uuid4)
-    # cognito_id = Column(UUID(as_uuid=True))
     cognito_id = Column(String)
     hased_password = Column(String , nullable = True)
     is_active = Column(Boolean , default = True)
@@ -31,7 +29,7 @@ class User(Base):
 # Roles                #
 ########################
 
-class Role(Base):
+class RT():
 
     __tablename__ = 'roles'
 
@@ -42,7 +40,7 @@ class Role(Base):
     modify_date = Column(DateTime , nullable = False , default = datetime.now())
     expiry_date = Column(DateTime , nullable = True)
 
-class RolesEntities(Base):
+class RET():
 
     __tablename__ = "roles_entities"
 
@@ -56,7 +54,7 @@ class RolesEntities(Base):
 # Groups               #
 ########################
 
-class Group(Base):
+class GT():
 
     __tablename__ = 'groups'
 
@@ -64,7 +62,7 @@ class Group(Base):
     name = Column(String)
     creation_date = Column(DateTime , nullable = False , default = datetime.now())
 
-class GroupUser(Base):
+class GUT():
 
     __tablename__ = "groups_users"
 
