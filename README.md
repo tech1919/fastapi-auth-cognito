@@ -1,7 +1,7 @@
 # Basic User Management Project
 
-This package works with PostgreSQL database engine.
 
+This package is a ready to use user authentication and autorization managment system, Using FastAPI, PostgreSQL, and AWS Cognito JWT based authentication.
 > ## Install Package
 
 ```
@@ -13,14 +13,36 @@ pip install ofry-fasatpi-auth-cognito
 
 Configure `.env` file:
 ```
-DATABASE_URL=
+USERS_DATABASE_URL=postgres://username:password@host:port/database_name
 COGNITO_REGION=
 COGNITO_POOL_ID=
 ```
 
-## Routes with authentication dependency
+> ## Add the auth router to the FastAPI app
 
-imports:
+import:
+```python
+from auth.router import auth_router
+from fastapi import FastAPI
+```
+
+define the app:
+```python
+app = FastAPI(
+    title = "API's name"
+)
+```
+
+include the auth router:
+```python
+app.include_router(router = auth_router , prefix="/auth")
+```
+
+This router comes with a built in auth configuration for every route.
+
+> ## Add authentication dependency
+
+import:
 ```python
 from auth.permission import PermissionCheck
 ```
@@ -37,9 +59,9 @@ async def secure() -> bool:
 
 another way of adding authentication and permission dependency to a group of routes:
 ```python
-
+# example
 app.include_router(router=users.router , prefix="/users" , dependencies=[Depends(PermissionCheck(statements=["resource:action"]))])
-# by adding this dependencie, now every route 
+# by adding this dependency, now every route 
 # expect a JWT that can be authenticaded with the JWKS from AWS Cognito
 ```
 
@@ -50,8 +72,7 @@ if a request that was sent to this route, contain in the **headers**:
 }
 ```
 than, the route will check first if this is an authenticated one comes from the AWS Cognito UserPool, as specified in the relevant environment variable `COGNITO_POOL_ID`. in this specific example , the route will also return the jwt cresentials as decoded from the JWT. this variable has this structure:
-```
-
+```json
 {
   "jwt_token": "the original JWT string",
   "header": {

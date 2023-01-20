@@ -2,16 +2,16 @@ import uuid
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, String , ForeignKey , Integer , JSON , Boolean , DateTime
 from sqlalchemy.dialects.postgresql import UUID
-
-from typing import AsyncGenerator
 from datetime import datetime
+from .db_connection import Base , engine
+
 
 
 ########################
 # Users                #
 ########################
 
-class UT():
+class User(Base):
 
     __tablename__ = 'users'
 
@@ -19,17 +19,18 @@ class UT():
     cognito_id = Column(String)
     hased_password = Column(String , nullable = True)
     is_active = Column(Boolean , default = True)
-    is_superuser  = Column(Boolean , default = False)
-    is_verified  = Column(Boolean , default = True)
+    is_superuser = Column(Boolean , default = False)
+    is_verified = Column(Boolean , default = True)
     creation_date = Column(DateTime , nullable=True , default = datetime.now())
     modify_date = Column(DateTime , nullable=True , default = datetime.now())
     user_metadata = Column(JSON , nullable=True)
+      
 
 ########################
 # Roles                #
 ########################
 
-class RT():
+class Role(Base):
 
     __tablename__ = 'roles'
 
@@ -40,7 +41,9 @@ class RT():
     modify_date = Column(DateTime , nullable = False , default = datetime.now())
     expiry_date = Column(DateTime , nullable = True)
 
-class RET():
+
+
+class RolesEntities(Base):
 
     __tablename__ = "roles_entities"
 
@@ -54,7 +57,7 @@ class RET():
 # Groups               #
 ########################
 
-class GT():
+class Group(Base):
 
     __tablename__ = 'groups'
 
@@ -62,7 +65,7 @@ class GT():
     name = Column(String)
     creation_date = Column(DateTime , nullable = False , default = datetime.now())
 
-class GUT():
+class GroupUser(Base):
 
     __tablename__ = "groups_users"
 
@@ -70,3 +73,8 @@ class GUT():
     group_id =  Column(UUID(as_uuid=True), ForeignKey('groups.id'))
     user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'))
     expiry_date  = Column(DateTime , nullable = True)
+
+
+
+# Base.metadata.drop_all(engine)
+Base.metadata.create_all(engine)

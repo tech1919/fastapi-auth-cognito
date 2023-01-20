@@ -1,13 +1,14 @@
 from uuid import UUID
-
+from sqlalchemy import Table , MetaData
 from sqlalchemy.orm import Session
-
 from auth.models import User , Group ,GroupUser
 from auth.schemas.models import UserUpdate , UserCreate , UserDelete , UserCheck
 
 from datetime import datetime
 
-def user_create(db : Session , record : User):
+
+def user_create(db : Session , record : UserCreate):
+    
     db_record = User(
         # name=record.name, 
         # email=record.email,
@@ -19,7 +20,7 @@ def user_create(db : Session , record : User):
         )
     db.add(db_record)
     db.commit()
-    db.refresh(db_record)
+    
     return db_record
 
 def user_get_all(db: Session):

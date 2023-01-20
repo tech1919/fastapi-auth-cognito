@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from uuid import UUID
 from database.connection import get_db
 from auth.schemas.models import GroupDelete , GroupCreate , GroupUpdate
-
+from auth.permission import PermissionCheck
 from auth.utils.group_crud import (
     group_create,
     group_delete,
@@ -20,8 +20,11 @@ from auth.utils.group_crud import (
 router = APIRouter(tags=["Groups"])
 
 
-
-@router.post("/create" , status_code=status.HTTP_201_CREATED) # response_model=UserCreate
+@router.post(
+    "/create" , 
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(PermissionCheck(statements=["group:write"]))],
+    ) # response_model=UserCreate
 def create_group(
     record : GroupCreate,
     db: Session = Depends(get_db),
@@ -29,17 +32,17 @@ def create_group(
   
     return group_create(db=db , record=record)
 
-@router.get("/list/all" , status_code=status.HTTP_200_OK , ) # response_model=List[UserCreate]
+@router.get("/list/all" , status_code=status.HTTP_200_OK , dependencies=[Depends(PermissionCheck(statements=["group:read"]))],) # response_model=List[UserCreate]
 def get_all_groups(
     db: Session = Depends(get_db),
 ):
     return groups_get_all(db=db)
 
-@router.get("/get/{id}", status_code=status.HTTP_200_OK, ) # response_model=UserCreate
+@router.get("/get/{id}", status_code=status.HTTP_200_OK, dependencies=[Depends(PermissionCheck(statements=["group:read"]))], ) # response_model=UserCreate
 def get_one_group(id, db: Session = Depends(get_db)):
     return group_get_one(db=db, id=id)
 
-@router.put("/update" , status_code=status.HTTP_200_OK , ) # response_model=UserCreate
+@router.put("/update" , status_code=status.HTTP_200_OK , dependencies=[Depends(PermissionCheck(statements=["group:write"]))],) # response_model=UserCreate
 def update_group(
     record : GroupUpdate,
     db: Session = Depends(get_db),    
@@ -49,7 +52,8 @@ def update_group(
 @router.delete(
     "/delete/{id}" , 
     status_code=status.HTTP_200_OK , 
-    response_model=GroupDelete
+    response_model=GroupDelete,
+    dependencies=[Depends(PermissionCheck(statements=["group:delete"]))],
 )
 def delete_group(
     id,
@@ -60,6 +64,7 @@ def delete_group(
 @router.post(
     "/add-a-user/{user_id}/{group_id}",
     status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(PermissionCheck(statements=["group:write" , "user:read" , "user:write"]))],
 )
 def assign_user_to_group(
     user_id : UUID,
@@ -72,6 +77,7 @@ def assign_user_to_group(
 @router.post(
     "/add-a-role/{role_id}/{cognito_group_name}",
     status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(PermissionCheck(statements=["group:write" , "role:write" , "role:read"]))],
 )
 def assign_role_to_group(
     role_id : UUID,
@@ -84,6 +90,7 @@ def assign_role_to_group(
 @router.delete(
     "/remove-a-user/{user_id}/{group_id}",
     status_code=status.HTTP_202_ACCEPTED,
+    dependencies=[Depends(PermissionCheck(statements=["group:write" , "user:delete" , "user:read"]))],
 )
 def remove_user_from_group(
     user_id : UUID ,
@@ -96,6 +103,7 @@ def remove_user_from_group(
 @router.delete(
     "/remove-a-role/{role_id}/{group_name}",
     status_code=status.HTTP_202_ACCEPTED,
+    dependencies=[Depends(PermissionCheck(statements=["group:write" , "role:delete" , "role:read"]))],
 )
 def remove_role_from_group(
     role_id : UUID ,

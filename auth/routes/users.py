@@ -2,7 +2,7 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from uuid import UUID
-from database.connection import get_db
+from auth.db_connection import get_db
 
 from auth.models import User
 from auth.schemas.models import UserCreate , UserDelete , UserUpdate , UserCheck

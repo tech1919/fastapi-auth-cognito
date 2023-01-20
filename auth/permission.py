@@ -3,26 +3,24 @@ from starlette.requests import Request
 from starlette.status import HTTP_403_FORBIDDEN
 from fastapi import Depends , HTTPException
 
-
 # auth handle
 from auth.JWTBearer import JWTBearer
 from auth.auth import jwks
-from .db_connection import get_db
+from database.connection import get_db
 from sqlalchemy.orm import Session
 
 auth = JWTBearer(jwks)
 
-from .models import RET as RolesEntities
-from .models import RT as Role
+from auth.models import RolesEntities , Role
 
 
 class PermissionCheck:
     """
-        This class will act as a dependency for every route
-        with a given statment, the __call__ function will query
-        in the roles_entities table to find all the roles related to the group
-        then the method will check if the required statment is in one of those
-        roles to grant permission for the user to use this route
+    This class will act as a dependency for every route
+    with a given statment, the __call__ function will query
+    in the roles_entities table to find all the roles related to the group
+    then the method will check if the required statment is in one of those
+    roles to grant permission for the user to use this route
     """
     def __init__(self , statements : List[str] ) -> None:
 

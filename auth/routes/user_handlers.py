@@ -5,22 +5,14 @@ router = APIRouter(tags=["auth"])
 from auth.JWTBearer import JWTBearer
 from auth.auth import jwks
 from auth.permission import PermissionCheck
-from auth.permission import (
-    users_read_permission_check,
-    event_write_permission_check,
-)
+
 
 
 auth = JWTBearer(jwks)
 
 
-
-
-
-
 @router.get("/secure/withpermissions", 
-description="this route is an example for a secure route",
-dependencies=[Depends(users_read_permission_check ) ,Depends(event_write_permission_check)],)
+description="this route is an example for a secure route",)
 async def secure_with_permissions():
     
     return {"message" : "You have access"}
