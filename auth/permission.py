@@ -6,7 +6,7 @@ from fastapi import Depends , HTTPException
 # auth handle
 from auth.JWTBearer import JWTBearer
 from auth.auth import jwks
-from database.connection import get_db
+from auth.db_connection import get_db
 from sqlalchemy.orm import Session
 
 auth = JWTBearer(jwks)
