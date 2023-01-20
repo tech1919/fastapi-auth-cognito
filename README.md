@@ -7,6 +7,9 @@ This package is a ready to use user authentication and autorization managment sy
 ```
 pip install ofry-fasatpi-auth-cognito
 ```
+```
+pip install "git+https://github.com/tech1919/fastapi-auth-cognito.git"
+```
 
 
 > ## Configure Environment

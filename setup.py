@@ -1,18 +1,25 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.0.1' 
+VERSION = '0.0.3' 
 DESCRIPTION = 'User management authentiation'
-LONG_DESCRIPTION = 'User management authentication and authorization for FastAPI using AWS Cognito service'
+
+try:
+    # read the contents of README file
+    from pathlib import Path
+    this_directory = Path(__file__).parent
+    LONG_DESCRIPTION = (this_directory / "README.md").read_text()
+except:
+    LONG_DESCRIPTION = 'User management authentication and authorization for FastAPI using AWS Cognito service'
 
 # Setting up
 setup(
-       # the name must match the folder name 'verysimplemodule'
         name="ofry-fasatpi-auth-cognito", 
         version=VERSION,
         author="Ofry Makdasy",
         author_email="ofry.makdsy@tech-19.com",
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
+        long_description_content_type='text/markdown',
         packages=find_packages(),
         install_requires=[
             'aiofiles==0.5.0',
