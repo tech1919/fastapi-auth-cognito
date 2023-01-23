@@ -2,19 +2,18 @@ from typing import Dict, Optional, List
 from starlette.requests import Request
 from starlette.status import HTTP_403_FORBIDDEN
 from fastapi import Depends , HTTPException
-
-# auth handle
-from auth.JWTBearer import JWTBearer
-from auth.auth import jwks
-from auth.db_connection import get_db
+from datetime import datetime
+from .JWTBearer import JWTBearer
+from .auth import jwks
+from .db_connection import get_db
 from sqlalchemy.orm import Session
-
+from utils.check_exp import has_expired
 auth = JWTBearer(jwks)
 
-from auth.models import RolesEntities , Role
+from fastauth.models import RolesEntities , Role
 
 
-class PermissionCheck:
+class CognitoJWTPermissionCheck:
     """
     This class will act as a dependency for every route
     with a given statment, the __call__ function will query
@@ -27,7 +26,7 @@ class PermissionCheck:
         # convert the statments list to a dictionary with
         # the list element as key and the values all False
         self.required_statements = self.list_to_dict(statements)
-
+   
     def list_to_dict(self , list_of_strings):
         """
             This method converts a list of statements (strings) to a 
@@ -70,8 +69,14 @@ class PermissionCheck:
     def __call__(self , jwt_creds : dict = Depends(auth) , db : Session = Depends(get_db)):
         """
             This is the method get called at the Depend part of the route
+            The __call__ method use as a dependency and relies on the fact 
+            that any error that occurs throughout the checks will fail the 
+            method and prevent the request to go over to the route in the API
         """
         
+        # checks if the JWT has expired
+        has_expired(expiration_date = dict(jwt_creds.claims)["exp"])
+
         # get the cognito groups from the JWT
         if not dict(jwt_creds.claims)["cognito:groups"]:
             raise HTTPException(
@@ -95,11 +100,17 @@ class PermissionCheck:
                 for s in cur_statments_list:
                     if s in self.required_statements:
                         self.required_statements[s] = True
+                    # special "all" symbol
+                    if "*" in s:
+                        resource = s.split(":")[0]
+                        for rs in self.required_statements:
+                            if resource in rs:
+                                self.required_statements[rs] = True
                 
             
             # make sure that all the statements checks as True at the required_statments
             self.validate_required_statements()
 
             # if the validate_required_statements did'nt raise any exception
-            return True # consider return some useful data
+            return jwt_creds
                 

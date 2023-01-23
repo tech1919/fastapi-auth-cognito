@@ -2,16 +2,16 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from uuid import UUID
-from auth.db_connection import get_db
+from fastauth.db_connection import get_db
 
-from auth.schemas.models import (
+from fastauth.schemas.models import (
     RoleDelete,
     RoleCreate,
     RoleUpdate,
     Permission,
 )
 
-from auth.utils.role_crud import (
+from fastauth.utils.role_crud import (
     role_create,
     role_get_all,
     role_delete,

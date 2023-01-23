@@ -1,12 +1,9 @@
-# Basic User Management Project
+# Fastauth - Basic User Management Package
 
 
 This package is a ready to use user authentication and autorization managment system, Using FastAPI, PostgreSQL, and AWS Cognito JWT based authentication.
 > ## Install Package
 
-```
-pip install ofry-fasatpi-auth-cognito
-```
 ```
 pip install "git+https://github.com/tech1919/fastapi-auth-cognito.git"
 ```
@@ -25,7 +22,7 @@ COGNITO_POOL_ID=
 
 import:
 ```python
-from auth.router import auth_router
+from fastauth.router import auth_router
 from fastapi import FastAPI
 ```
 
@@ -47,14 +44,14 @@ This router comes with a built in auth configuration for every route.
 
 import:
 ```python
-from auth.permission import PermissionCheck
+from fastauth.permission import CognitoJWTPermissionCheck
 ```
 
 add authentication and permission check to a route:
 ```python
 @router.get("/secure", 
 description="this route is an example for a secure route",
-dependencies=[Depends(PermissionCheck(statements=["resource:action"]))],)
+dependencies=[Depends(CognitoJWTPermissionCheck(statements=["resource:action"]))],)
 async def secure() -> bool:
     
     return { "message" : "You have access" }
@@ -63,7 +60,7 @@ async def secure() -> bool:
 another way of adding authentication and permission dependency to a group of routes:
 ```python
 # example
-app.include_router(router=users.router , prefix="/users" , dependencies=[Depends(PermissionCheck(statements=["resource:action"]))])
+app.include_router(router=users.router , prefix="/users" , dependencies=[Depends(CognitoJWTPermissionCheck(statements=["resource:action"]))])
 # by adding this dependency, now every route 
 # expect a JWT that can be authenticaded with the JWKS from AWS Cognito
 ```

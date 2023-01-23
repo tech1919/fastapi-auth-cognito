@@ -1,12 +1,12 @@
 from fastapi import APIRouter , Depends
-from auth.routes import (
+from fastauth.routes import (
     users,
     group_user,
     groups,
     roles,
     roles_entities,
 )
-from auth import permission
+from fastauth import permission
 
 auth_router = APIRouter()
 

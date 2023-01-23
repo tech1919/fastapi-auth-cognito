@@ -1,8 +1,8 @@
 from uuid import UUID
 from sqlalchemy.orm import Session
 
-from auth.models import Role
-from auth.schemas.models import (
+from fastauth.models import Role
+from fastauth.schemas.models import (
     RoleCreate , 
     RoleUpdate , 
     RoleDelete ,

@@ -2,12 +2,12 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from uuid import UUID
-from auth.db_connection import get_db
+from fastauth.db_connection import get_db
+from fastauth.permission import CognitoJWTPermissionCheck
+from fastauth.models import User
+from fastauth.schemas.models import UserCreate , UserDelete , UserUpdate , UserCheck
 
-from auth.models import User
-from auth.schemas.models import UserCreate , UserDelete , UserUpdate , UserCheck
-
-from auth.utils.user_crud import (
+from fastauth.utils.user_crud import (
     user_create,
     user_delete,
     user_get_all,

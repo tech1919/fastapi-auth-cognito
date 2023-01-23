@@ -1,4 +1,4 @@
-from .permission import PermissionCheck , auth
+from .permission import CognitoJWTPermissionCheck , auth
 from .router import auth_router
 from .models import (
     User,

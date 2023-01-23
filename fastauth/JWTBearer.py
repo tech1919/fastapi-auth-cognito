@@ -1,5 +1,4 @@
 from typing import Dict, Optional, List
-
 from fastapi import HTTPException 
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import jwt, jwk, JWTError
@@ -7,6 +6,8 @@ from jose.utils import base64url_decode
 from pydantic import BaseModel
 from starlette.requests import Request
 from starlette.status import HTTP_403_FORBIDDEN
+from fastauth.utils.check_exp import has_expired
+
 
 JWK = Dict[str, str]
 
@@ -67,4 +68,9 @@ class JWTBearer(HTTPBearer):
             if not self.verify_jwk_token(jwt_credentials):
                 raise HTTPException(status_code=HTTP_403_FORBIDDEN, detail="JWK invalid")
 
+
+            
+            # checks if the JWT has expired
+            has_expired(expiration_date = dict(jwt_credentials.claims)["exp"])
+            
             return jwt_credentials

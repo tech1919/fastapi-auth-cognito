@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends , Security
 router = APIRouter(tags=["auth"])
 
 # auth handel
-from auth.JWTBearer import JWTBearer
-from auth.auth import jwks
-from auth.permission import PermissionCheck
+from fastauth.JWTBearer import JWTBearer
+from fastauth.auth import jwks
+from fastauth.permission import CognitoJWTPermissionCheck
 
 
 

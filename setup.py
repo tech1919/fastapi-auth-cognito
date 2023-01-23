@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.0.4' 
+VERSION = '0.0.5'
 DESCRIPTION = 'User management authentiation'
 
 try:
@@ -13,7 +13,7 @@ except:
 
 # Setting up
 setup(
-        name="ofry-fasatpi-auth-cognito", 
+        name="fastauth", 
         version=VERSION,
         author="Ofry Makdasy",
         author_email="ofry.makdsy@tech-19.com",
