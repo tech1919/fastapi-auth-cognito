@@ -28,6 +28,7 @@ setup(
             'requests==2.28.2',
             'SQLAlchemy==1.4.46',
             'psycopg2',
+            'boto3',
             ],
         
         keywords=['python', 'first package' , 'fastapi' , 'cognito' , 'jwt'],

@@ -16,6 +16,7 @@ Configure `.env` file:
 USERS_DATABASE_URL=postgres://username:password@host:port/database_name
 COGNITO_REGION=
 COGNITO_POOL_ID=
+COGNITO_CLIENT_ID=
 ```
 
 > ## Add the auth router to the FastAPI app
