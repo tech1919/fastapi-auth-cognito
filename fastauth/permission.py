@@ -7,7 +7,7 @@ from .JWTBearer import JWTBearer
 from .auth import jwks
 from .db_connection import get_db
 from sqlalchemy.orm import Session
-from utils.check_exp import has_expired
+from fastauth.utils.check_exp import has_expired
 auth = JWTBearer(jwks)
 
 from fastauth.models import RolesEntities , Role

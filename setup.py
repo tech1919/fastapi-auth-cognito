@@ -27,6 +27,7 @@ setup(
             'python-jose==3.3.0',
             'requests==2.28.2',
             'SQLAlchemy==1.4.46',
+            'psycopg2',
             ],
         
         keywords=['python', 'first package' , 'fastapi' , 'cognito' , 'jwt'],
