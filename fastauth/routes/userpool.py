@@ -21,6 +21,7 @@ async def login(credentials: HTTPBasicCredentials = Depends(security)):
         response = client.admin_initiate_auth(
             UserPoolId=USER_POOL_ID,
             ClientId=COGNITO_CLIENT_ID,
+            AuthFlow='ADMIN_NO_SRP_AUTH',
             AuthParameters={
                 'USERNAME': credentials.username,
                 'PASSWORD': credentials.password
