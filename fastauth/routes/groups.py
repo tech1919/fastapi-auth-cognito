@@ -32,17 +32,29 @@ def create_group(
   
     return group_create(db=db , record=record)
 
-@router.get("/list/all" , status_code=status.HTTP_200_OK , dependencies=[Depends(CognitoJWTPermissionCheck(statements=["group:read"]))],) # response_model=List[UserCreate]
+@router.get(
+    "/list/all" , 
+    status_code=status.HTTP_200_OK , 
+    dependencies=[Depends(CognitoJWTPermissionCheck(statements=["group:read"]))],
+    ) # response_model=List[UserCreate]
 def get_all_groups(
     db: Session = Depends(get_db),
 ):
     return groups_get_all(db=db)
 
-@router.get("/get/{id}", status_code=status.HTTP_200_OK, dependencies=[Depends(CognitoJWTPermissionCheck(statements=["group:read"]))], ) # response_model=UserCreate
+@router.get(
+    "/get/{id}", 
+    status_code=status.HTTP_200_OK, 
+    dependencies=[Depends(CognitoJWTPermissionCheck(statements=["group:read"]))], 
+    ) # response_model=UserCreate
 def get_one_group(id, db: Session = Depends(get_db)):
     return group_get_one(db=db, id=id)
 
-@router.put("/update" , status_code=status.HTTP_200_OK , dependencies=[Depends(CognitoJWTPermissionCheck(statements=["group:write"]))],) # response_model=UserCreate
+@router.put(
+    "/update" , 
+    status_code=status.HTTP_200_OK , 
+    dependencies=[Depends(CognitoJWTPermissionCheck(statements=["group:write"]))],
+    ) # response_model=UserCreate
 def update_group(
     record : GroupUpdate,
     db: Session = Depends(get_db),    

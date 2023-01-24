@@ -16,7 +16,7 @@ class HealthResponse(BaseModel):
 
 
 class UserCreate(BaseModel):
-    cognito_id : str
+    username : str
     hased_password : str
     is_active : bool
     is_superuser : bool

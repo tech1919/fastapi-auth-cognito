@@ -1,4 +1,5 @@
 from uuid import UUID
+from fastapi import HTTPException , status
 from sqlalchemy import Table , MetaData
 from sqlalchemy.orm import Session
 from fastauth.models import User , Group ,GroupUser
@@ -10,9 +11,9 @@ from datetime import datetime
 def user_create(db : Session , record : UserCreate):
     
     db_record = User(
-        # name=record.name, 
+        username=record.username, 
         # email=record.email,
-        cognito_id=record.cognito_id,
+        # cognito_id=record.cognito_id,
         hased_password=record.hased_password,
         is_active = record.is_active,
         is_superuser = record.is_superuser,
@@ -20,14 +21,25 @@ def user_create(db : Session , record : UserCreate):
         )
     db.add(db_record)
     db.commit()
-    
+
+    db_record = db.query(User).filter_by(username = record.username).one()
     return db_record
 
 def user_get_all(db: Session):
     return db.query(User).all()
 
 def user_get_one(db: Session , id : UUID):
-    return db.query(User).filter_by(id=id).one()
+    try:
+        db_query = db.query(User).filter_by(id=id).one()
+    except:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND ,detail="User not found"
+        )
+        
+    return db_query
+
+def user_get_one_by_username(db : Session , username : str):
+    return db.query(User).filter_by(username=username).one()
 
 def user_get_metadata(db: Session , id : UUID):
     record = db.query(User).filter_by(id = id).one()

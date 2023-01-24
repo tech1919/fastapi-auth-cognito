@@ -15,23 +15,28 @@ router = APIRouter(tags=["Cognito"])
 
 
 @router.post("/login")
-async def login(credentials: HTTPBasicCredentials = Depends(security)):
+async def login(
+    credentials: HTTPBasicCredentials = Depends(security)
+    ): 
     client = boto3.client('cognito-idp')
     try:
-        response = client.admin_initiate_auth(
-            UserPoolId=USER_POOL_ID,
+        
+        
+        response = client.initiate_auth(
+            # UserPoolId=USER_POOL_ID,
             ClientId=COGNITO_CLIENT_ID,
-            AuthFlow='ADMIN_NO_SRP_AUTH',
+            AuthFlow='USER_PASSWORD_AUTH',
             AuthParameters={
                 'USERNAME': credentials.username,
                 'PASSWORD': credentials.password
             }
         )
+
         return response
     except client.exceptions.NotAuthorizedException as e:
-        raise HTTPException(status_code=400, detail="Incorrect username or password")
+        raise HTTPException(status_code=400, detail="Not authorized. Incorrect username or password")
     except client.exceptions.UserNotFoundException as e:
-        raise HTTPException(status_code=400, detail="Incorrect username or password")
+        raise HTTPException(status_code=400, detail="User not found. Incorrect username or password")
 
 
 """
