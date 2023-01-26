@@ -45,3 +45,29 @@ async def login(
     field of the response from the admin_initiate_auth method. Specifically, the 
     JWT will be included in the IdToken field of the AuthenticationResult dictionary
 """
+
+
+@router.post("/sign-new-user")
+async def signup(username: str, password: str, email: str):
+    client = boto3.client("cognito-idp")
+    try:
+        response = client.sign_up(
+            ClientId=COGNITO_CLIENT_ID,
+            Username=username,
+            Password=password,
+            UserAttributes=[
+                {
+                    'Name': 'email',
+                    'Value': email
+                },
+            ]
+        )
+
+        return response
+    except client.exceptions.UsernameExistsException as e:
+        raise HTTPException(status_code=400 , detail="This username already exists")
+    except client.exceptions.InvalidParameterException as e:
+        raise HTTPException(status_code=400 , detail="Invalid parameters provided")
+    except Exception as e:
+        raise HTTPException(status_code=400 , detail="An error occurred")
+
