@@ -22,7 +22,7 @@ setup(
         long_description_content_type='text/markdown',
         packages=find_packages(),
         install_requires=[
-            'fastapi==0.0.6',
+            'fastapi',
             'python-dotenv==0.21.0',
             'python-jose==3.3.0',
             'requests==2.28.2',
