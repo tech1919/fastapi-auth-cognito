@@ -13,7 +13,7 @@ pip install "git+https://github.com/tech1919/fastapi-auth-cognito.git"
 
 Configure `.env` file:
 ```
-USERS_DATABASE_URL=postgres://username:password@host:port/database_name
+USERS_DATABASE_URL=postgresql://username:password@host:port/database_name
 COGNITO_REGION=
 COGNITO_POOL_ID=
 COGNITO_CLIENT_ID=
